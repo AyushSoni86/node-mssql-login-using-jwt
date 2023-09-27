@@ -9,16 +9,16 @@ const app = express();
 const cookieParser = require('cookie-parser');
 
 const config = {
-    user: 'ayush',
-    password: 'root',
-    server: 'localhost',
-    database: 'nodejs-login',
-    options: {
-        trustedconnection: true,
-        enableArithAbort: true,
-        trustServerCertificate: true,
-    },
-    port: 1433
+  user: 'ayush',
+  password: 'root',
+  server: 'localhost',
+  database: 'nodejs-login',
+  options: {
+    trustedconnection: true,
+    enableArithAbort: true,
+    trustServerCertificate: true,
+  },
+  port: 1433
 };
 
 const publicDirectory = path.join(__dirname, './public')
@@ -30,6 +30,8 @@ app.use(express.static(publicDirectory));
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
+
+// app.engine('hbs', exphbs({ extname: '.hbs' }));
 
 app.set('view engine', 'hbs');
 
@@ -43,17 +45,12 @@ pool.connect()
     console.error('Error connecting to MSSQL database:', err);
   });
 
-// sql.connect(config, function (err) {
-//     if (err) console.log(err);
-//     else console.log("Database connected successfully.............")
-// });
-
 app.use('/', require('./routes/pages'));
 
 app.use('/auth', require('./routes/auth'));
 
 app.listen(5000, () => {
-    console.log("Server started on 5000 port");
+  console.log("Server started on 5000 port");
 });
 
 module.exports.pool = { pool };

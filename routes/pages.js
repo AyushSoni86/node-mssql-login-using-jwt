@@ -19,6 +19,7 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
   if (req.user) {
     res.render('profile', {
       user: req.user,
+      role: req.user.role,
       initials: req.user.name.substring(0, 2).toUpperCase()
     });
   } else {
@@ -31,6 +32,7 @@ router.get('/login', authController.isLoggedIn, (req, res) => {
   if (req.user) {
     res.render('profile', {
       user: req.user,
+      role: req.user.role,
       initials: req.user.name.substring(0, 2).toUpperCase()
     });
   } else {
@@ -43,6 +45,7 @@ router.get('/register', authController.isLoggedIn, (req, res) => {
   if (req.user) {
     res.render('profile', {
       user: req.user,
+      role: req.user.role,
       initials: req.user.name.substring(0, 2).toUpperCase()
     });
   } else {

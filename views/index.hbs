@@ -13,7 +13,12 @@
             NodeAPI
         </div>
         <div class="nav-links">
-       
+            {{#if user.role}}
+            <a  href="admin" class="logout">
+                Admin
+            </a>
+            {{/if}}
+
             {{#if user}}
             <a href="/profile">
                 <div class="profile-image">
