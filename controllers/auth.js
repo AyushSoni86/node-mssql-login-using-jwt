@@ -168,40 +168,6 @@ exports.isLoggedIn = async (req, res, next) => {
     }
 };
 
-// exports.isLoggedIn = async (req, res, next) => {
-//     console.log(req.cookies);
-//     if (req.cookies.jwt) {
-//         try {
-//             // 1) verify token
-//             const decoded = await promisify(jwt.verify)(
-//                 req.cookies.jwt,
-//                 JWT_SECRET
-//             );
-
-//             console.log("decoded");
-//             console.log(decoded);
-
-//             // 2) Check if user still exists
-//             sql.start.query('SELECT * FROM users WHERE id = ?', [decoded.id], (error, result) => {
-//                 console.log(result)
-//                 if (!result) {
-//                     return next();
-//                 }
-//                 // THERE IS A LOGGED IN USER
-//                 console.log("Still logged in");
-//                 req.user = result[0];
-//                 // res.locals.user = result[0];
-//                 console.log("next")
-//                 return next();
-//             });
-//         } catch (err) {
-//             return next();
-//         }
-//     } else {
-//         next();
-//     }
-// };
-
 exports.logout = (req, res) => {
     res.cookie('jwt', 'loggedout', {
         expires: new Date(Date.now() + 10 * 1000),
