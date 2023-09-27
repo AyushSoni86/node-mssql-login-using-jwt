@@ -8,7 +8,8 @@ router.get('/', authController.isLoggedIn, (req, res) => {
     console.log("inside");
     console.log(req.user);
     res.render('index', {
-      user: req.user
+      user: req.user,
+      initials: (req.user !== undefined)?req.user.name.substring(0, 2).toUpperCase() : ""
     });
   });
   
@@ -17,7 +18,8 @@ router.get('/', authController.isLoggedIn, (req, res) => {
     console.log(req.user);
     if(req.user) {
       res.render('profile', {
-        user: req.user
+        user: req.user,
+        initials: req.user.name.substring(0, 2).toUpperCase()  
       });
     } else {
       res.redirect("/login");

@@ -169,3 +169,9 @@ a.google span{
     }
     
 }
+
+svg{
+    height: 5vh;
+    width: 5vw;
+    margin-left: -20px;
+}

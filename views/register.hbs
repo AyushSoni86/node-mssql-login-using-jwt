@@ -9,6 +9,69 @@
     <link rel="stylesheet" href="/form.css">
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
 
+    <style>
+        .error-message {
+            margin-top: 3px;
+            margin-left: 8px;
+            color: red;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+    <script>
+
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('bx-hide');
+                icon.classList.add('bx-show');
+            } else {
+                input.type = "password";
+                icon.classList.remove('bx-show');
+                icon.classList.add('bx-hide');
+            }
+        }
+        function validateForm() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirm_password = document.getElementById("confirm_password").value;
+
+            // Email validation using a regular expression
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+            // Password validation using regular expressions
+            const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+            const errorElement = document.getElementById("error-message");
+
+            errorElement.innerHTML = "";
+
+            if (!name || !email || !password || !confirm_password) {
+                errorElement.innerHTML += "All fields are required.<br>";
+            }
+
+            if (!email.match(emailPattern)) {
+                errorElement.innerHTML += "Please enter a valid email address.<br>";
+            }
+
+            if (!password.match(passwordPattern)) {
+                errorElement.innerHTML += "Password should contain at least 8 characters, including a number, an alphabet, and a special symbol.<br>";
+            }
+
+            else if (password !== confirm_password) {
+                errorElement.innerHTML += "Password and Confirm Password do not match.<br>";
+            }
+
+            return errorElement.innerHTML === "";
+        }
+    </script>
 </head>
 
 <body>
@@ -16,29 +79,38 @@
         <div class="form login">
             <div class="form-content">
                 <header>Register</header>
-                <form action="/auth/register" method="POST">
+                <form action="/auth/register" method="POST" onsubmit="return validateForm();">
                     <div class="field input-field">
-                        <input type="name" placeholder="Name" id="name" class="input" name="name">
+                        <input type="name" placeholder="Name" id="name" class="input" name="name" required>
+                    </div>
+                    <div class="field input-field">
+                        <input type="email" placeholder="Email" id="email" class="input" name="email"
+                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
                     </div>
 
-                    <div class="field input-field">
+                    {{!-- <div class="field input-field">
                         <input type="email" placeholder="Email" id="email" class="input" name="email">
-                    </div>
+                    </div> --}}
 
                     <div class="field input-field">
-                        <input type="password" placeholder="Password" id="password" class="password" name="password">
-                        <i class='bx bx-hide eye-icon'></i>
+                        <input type="password" placeholder="Password" id="password" class="password" name="password"
+                            required>
+                        <i class='bx bx-hide eye-icon' id="eye-password"
+                            onclick="togglePasswordVisibility('password', 'eye-password')"></i>
                     </div>
 
                     <div class="field input-field">
                         <input type="password" placeholder="Confirm Password" id="confirm_password" class="password"
-                            name="confirm_password">
-                        <i class='bx bx-hide eye-icon'></i>
+                            name="confirm_password" required>
+                        <i class='bx bx-hide eye-icon' id="eye-confirm-password"
+                            onclick="togglePasswordVisibility('confirm_password', 'eye-confirm-password')"></i>
                     </div>
 
                     <div class="field button-field">
                         <button type="submit">Register</button>
                     </div>
+
+                    <div class="error-message" id="error-message"></div>
 
                     {{#if message}}
                     <center>
@@ -47,61 +119,14 @@
                     {{/if}}
                 </form>
 
+                <div class="line"></div>
+
                 <div class="form-link">
                     <span>Already have an account? <a href="login" class="link signup-link">Login</a></span>
                 </div>
             </div>
-
-
-
         </div>
 
-        <!-- Signup Form -->
-
-        <div class="form signup">
-            <div class="form-content">
-                <header>Signup</header>
-                <form action="#">
-                    <div class="field input-field">
-                        <input type="email" placeholder="Email" class="input">
-                    </div>
-
-                    <div class="field input-field">
-                        <input type="password" placeholder="Create password" class="password">
-                    </div>
-
-                    <div class="field input-field">
-                        <input type="password" placeholder="Confirm password" class="password">
-                        <i class='bx bx-hide eye-icon'></i>
-                    </div>
-
-                    <div class="field button-field">
-                        <button>Signup</button>
-                    </div>
-                </form>
-
-                <div class="form-link">
-                    <span>Already have an account? <a href="#" class="link login-link">Login</a></span>
-                </div>
-            </div>
-
-            <div class="line"></div>
-
-            <div class="media-options">
-                <a href="#" class="field facebook">
-                    <i class='bx bxl-facebook facebook-icon'></i>
-                    <span>Login with Facebook</span>
-                </a>
-            </div>
-
-            <div class="media-options">
-                <a href="#" class="field google">
-                    <img src="#" alt="" class="google-img">
-                    <span>Login with Google</span>
-                </a>
-            </div>
-
-        </div>
     </section>
 
     <!-- JavaScript -->

@@ -27,8 +27,8 @@ pool.connect()
   });
 
 const JWT_SECRET = "Hello-world";
-const JWT_EXPIRES_IN = 120;
-const JWT_COOKIE_EXPIRES_IN = 100;
+const JWT_EXPIRES_IN = 1000;
+const JWT_COOKIE_EXPIRES_IN = 1000;
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
@@ -89,7 +89,7 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
     console.log(req.body);
-    const { name, email, password, passwordConfirm } = req.body;
+    const { name, email, password, confirm_password } = req.body;
 
     try {
         const poolRequest = pool.request();
@@ -101,7 +101,7 @@ exports.register = async (req, res) => {
             return res.render('register', {
                 message: 'That Email has been taken'
             });
-        } else if (password !== passwordConfirm) {
+        } else if (password !== confirm_password) {
             return res.render('register', {
                 message: 'Passwords do not match'
             });
