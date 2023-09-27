@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/portfolio.css">
   <title>Document</title>
 </head>
 
@@ -31,9 +32,36 @@
     </div>
   </div>
 
-  <div class="container">
-    <h1>Welcome {{user.name}}</h1>
-  </div>
+ <section id="profile">
+      <div class="section__pic-container">
+        <div>{{initials}}</div>
+        {{!-- <img src="./assets/profile-ayush.jpeg" alt="Ayush Soni profile picture" /> --}}
+      </div>
+      <div class="section__text">
+        <p class="section__text__p1">Hello, I'm</p>
+        <h1 class="title">{{user.name}}</h1>
+        <p class="section__text__p2">Software Developer</p>
+      </div>
+    </section>
+    
+    <section id="contact">
+      <p class="section__text__p1">Get in Touch</p>
+      <h1 class="title">Contact Me</h1>
+      <div class="contact-info-upper-container">
+        <div class="contact-info-container">
+          <img
+            src="./assets/email.png"
+            alt="Email icon"
+            class="icon contact-icon email-icon"
+          />
+          <p><a>{{user.email}}</a></p>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <p>Copyright &#169; 2023 {{user.email}}. All Rights Reserved.</p>
+    </footer>
+
 </body>
 
 </html>

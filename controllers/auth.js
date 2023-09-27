@@ -27,8 +27,8 @@ pool.connect()
   });
 
 const JWT_SECRET = "Hello-world";
-const JWT_EXPIRES_IN = 1000;
-const JWT_COOKIE_EXPIRES_IN = 1000;
+const JWT_EXPIRES_IN = 10000;
+const JWT_COOKIE_EXPIRES_IN = 10000;
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
