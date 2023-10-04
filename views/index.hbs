@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="/timer.css">
 </head>
 
 <body>
@@ -14,7 +15,7 @@
         </div>
         <div class="nav-links">
             {{#if user.role}}
-            <a  href="admin" class="logout">
+            <a href="admin" class="logout">
                 Admin
             </a>
             {{/if}}
@@ -31,6 +32,124 @@
             {{/if}}
         </div>
     </div>
+
+
+    {{#if user}}
+    <h1>
+        Visit your Profile
+        <span>
+            {{user.name}}
+        </span>
+    </h1>
+
+    {{else}}
+
+    <div class="container">
+        <audio id="audio" preload="auto">
+            <source src="https://cdn.search.brave.com/serp/v2/_app/immutable/assets/alarm.d4517a35.mp3"
+                type="audio/mpeg" />
+        </audio>
+        <div class="timer">
+            <div class="timer-controls">
+                <label for="targetDate">Set Date and Time:</label>
+                <input type="datetime-local" id="targetDate" />
+                <button id="start">Start</button>
+                <button id="pause">Pause</button>
+                <button id="reset">Reset</button>
+            </div>
+        </div>
+        <div class="timer-display">
+            <div class="time">
+                <span id="days">00</span>
+                <p>days</p>
+            </div>
+            <div class="time">
+                <span id="hours">00</span>
+
+                <p>hours</p>
+            </div>
+            <div class="time">
+                <span id="minutes">00</span>
+                <p>minutes</p>
+            </div>
+            <div class="time">
+                <span id="seconds">00</span>
+                <p>seconds</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const startButton = document.getElementById("start");
+        const pauseButton = document.getElementById("pause");
+        const resetButton = document.getElementById("reset");
+        const targetDateInput = document.getElementById("targetDate");
+        const daysDisplay = document.getElementById("days");
+        const hoursDisplay = document.getElementById("hours");
+        const minutesDisplay = document.getElementById("minutes");
+        const secondsDisplay = document.getElementById("seconds");
+
+        let countdown;
+        let targetDate;
+
+        function updateTimer() {
+            const currentTime = new Date();
+            const timeDifference = targetDate - currentTime;
+            console.log(targetDate, currentTime, timeDifference);
+            if (timeDifference <= 0) {
+                playSound();
+                clearInterval(countdown);
+                alert("Countdown timer reached zero!");
+                resetTimer();
+                return;
+            }
+
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+            console.log(days, hours, minutes, seconds);
+
+            daysDisplay.textContent = days < 10 ? "0" + days : days;
+            hoursDisplay.textContent = hours < 10 ? "0" + hours : hours;
+            minutesDisplay.textContent = minutes < 10 ? "0" + minutes : minutes;
+            secondsDisplay.textContent = seconds < 10 ? "0" + seconds : seconds;
+        }
+
+        startButton.addEventListener("click", () => {
+            if (!countdown) {
+                targetDate = new Date(targetDateInput.value);
+                countdown = setInterval(updateTimer, 1000);
+            }
+        });
+
+        function playSound() {
+            const audio = document.getElementById("audio");
+            audio.play();
+        }
+
+        pauseButton.addEventListener("click", () => {
+            clearInterval(countdown);
+            countdown = null;
+        });
+
+        resetButton.addEventListener("click", () => {
+            resetTimer();
+        });
+
+        function resetTimer() {
+            clearInterval(countdown);
+            countdown = null;
+            targetDateInput.value = "";
+            daysDisplay.textContent = "00";
+            hoursDisplay.textContent = "00";
+            minutesDisplay.textContent = "00";
+            secondsDisplay.textContent = "00";
+        }
+
+    </script>
+
+    {{/if}}
 </body>
 
 </html>

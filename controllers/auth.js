@@ -4,20 +4,14 @@ const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 // const { pool } = require("../app")
 
-const config = {
-    user: 'ayush',
-    password: 'root',
-    server: 'localhost',
-    database: 'nodejs-login',
-    options: {
-        trustedconnection: true,
-        enableArithAbort: true,
-        trustServerCertificate: true,
-    },
-    port: 1433
-};
+const config = require("../config")
+
+const JWT_SECRET = "Hello-world";
+const JWT_EXPIRES_IN = 10000;
+const JWT_COOKIE_EXPIRES_IN = 10000;
 
 const pool = new sql.ConnectionPool(config);
+
 pool.connect()
   .then(() => {
     console.log('Connected to MSSQL database');
@@ -26,9 +20,6 @@ pool.connect()
     console.error('Error connecting to MSSQL database:', err);
   });
 
-const JWT_SECRET = "Hello-world";
-const JWT_EXPIRES_IN = 10000;
-const JWT_COOKIE_EXPIRES_IN = 10000;
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
@@ -88,15 +79,12 @@ exports.login = async (req, res) => {
 };
 
 exports.register = async (req, res) => {
-    console.log(req.body);
     const { name, email, password, confirm_password } = req.body;
-
     try {
         const poolRequest = pool.request();
         const checkEmailResult = await poolRequest.input('email', email).query(
             "SELECT email FROM users WHERE email = @email"
         );
-
         if (checkEmailResult.recordset.length > 0) {
             return res.render('register', {
                 message: 'That Email has been taken'
@@ -140,16 +128,11 @@ exports.isLoggedIn = async (req, res, next) => {
                 JWT_SECRET
             );
 
-            console.log("decoded");
-            console.log(decoded);
-
             // 2) Check if user still exists
             const poolRequest = pool.request();
             const result = await poolRequest.input('id', decoded.id).query(
                 'SELECT * FROM users WHERE id = @id'
             );
-
-            console.log(result);
 
             if (!result.recordset.length) {
                 return next();
@@ -158,7 +141,6 @@ exports.isLoggedIn = async (req, res, next) => {
             // THERE IS A LOGGED IN USER
             console.log("Still logged in");
             req.user = result.recordset[0];
-            console.log("next");
             return next();
         } catch (err) {
             return next();
