@@ -47,4 +47,15 @@ router.get('/register', authController.isLoggedIn, (req, res) => {
   }
 });
 
+
+
+router.get('/admin',authController.isLoggedIn, (req, res)=>{
+  if(req.user){
+    res.render('admin');
+  }else{
+    res.render('home');
+  }
+} )
+
+
 module.exports = router;

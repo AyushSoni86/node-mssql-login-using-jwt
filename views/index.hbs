@@ -15,7 +15,7 @@
         </div>
         <div class="nav-links">
             {{#if user.role}}
-            <a href="admin" class="logout">
+            <a href="/admin" class="logout">
                 Admin
             </a>
             {{/if}}
@@ -35,12 +35,12 @@
 
 
     {{#if user}}
-    <h1>
-        Visit your Profile
-        <span>
+    <div class="isLoggedin">
+       <h1> Visit your Profile, <span>
             {{user.name}}
-        </span>
-    </h1>
+        </span></h1>
+        
+    </div>
 
     {{else}}
 

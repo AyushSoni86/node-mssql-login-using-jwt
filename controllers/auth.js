@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 // const { pool } = require("../app")
 
-const config = require("../config")
+const config = require("../config");
+const { cwd } = require("process");
 
 const JWT_SECRET = "Hello-world";
 const JWT_EXPIRES_IN = 10000;
@@ -119,27 +120,30 @@ exports.register = async (req, res) => {
 };
 
 exports.isLoggedIn = async (req, res, next) => {
-    console.log(req.cookies);
+    // console.log(req.cookies);
     if (req.cookies.jwt) {
         try {
+            console.log("req.cookies ->", req.cookies);
             // 1) Verify token
             const decoded = await promisify(jwt.verify)(
                 req.cookies.jwt,
                 JWT_SECRET
             );
-
+            console.log("decoded -> ", decoded);
             // 2) Check if user still exists
             const poolRequest = pool.request();
             const result = await poolRequest.input('id', decoded.id).query(
                 'SELECT * FROM users WHERE id = @id'
             );
 
+            console.log("result->", result);
+            
             if (!result.recordset.length) {
                 return next();
             }
 
             // THERE IS A LOGGED IN USER
-            console.log("Still logged in");
+            console.log("isLoggedIn working -> Still logged in");
             req.user = result.recordset[0];
             return next();
         } catch (err) {
